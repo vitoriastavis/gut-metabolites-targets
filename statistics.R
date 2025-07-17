@@ -1,5 +1,10 @@
 load("targets_metabolites.RData")
 
+library(dplyr)
+
+# Number of unique metabolites
+length(names(metabolites_to_targets))
+
 # Mean number of metabolites per target
 cat(mean(sapply(targets_to_metabolites, length)))
 
@@ -22,10 +27,8 @@ ligand_counts <- ligand_table %>%
   count(Ligand, name = "Target_Count") %>%
   arrange(desc(Target_Count))
 
-# Get the metabolites with higher target_count (3)
+# Get the targets for  metabolites with higher target_count 
 top_metabolites <- ligand_counts %>%
-  filter(Target_Count == 3) %>%
+  filter(Target_Count > 1) %>%
   pull(Ligand)
-
-# Get the targets for those metabolites
 top_metabolites_targets <- metabolites_to_targets[top_metabolites]
